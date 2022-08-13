@@ -1,0 +1,106 @@
+<h1 class="bg-info">Reactive Form</h1>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-8 offset-sm-2">
+      <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
+
+        <div formGroupName="userDetails">
+          <div class="row">
+            <div class="col-sm-9">
+              <div class="form-group mb-4">
+                <label for="userName"><strong>Username*</strong></label>
+                <input formControlName="userName" type="text" name="userName" id="userName" class="form-control">
+                <span class="error" *ngIf="getUserNameControl.invalid && getUserNameControl.touched">Username is Required Field*</span>
+                <span class="error" *ngIf="getUserNameControl.dirty && getUserNameControl.getError('spaceNotAllow') != null">Space is not allowed in username*</span>
+              </div>
+            </div>
+
+            <div class="col-sm-3">
+              <div class="form-group mb-4">
+                <label for="empID"><strong>Employee ID*</strong></label>
+                <input formControlName="empID" type="text" name="empID" id="empID" class="form-control">
+                <span *ngIf="getEmpIDControl.touched && getEmpIDControl.invalid">
+                  Employee ID is required field
+                </span>
+                <span *ngIf="getEmpIDControl.dirty && getEmpIDControl.getError('minlength')!= null">
+                  Min Length should 4 Characters
+                </span>
+                <span *ngIf="getEmpIDControl.dirty && getEmpIDControl.getError('maxlength') != null">Max Length should 4 Characters</span>
+                <span *ngIf="getEmpIDControl.dirty && getEmpIDControl.getError('empID') != null">Should start with 1 Aplabet and end with 3 numbers</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group mb-4">
+            <label for="email"><strong>Email*</strong></label>
+            <input formControlName="email" type="text" name="email" id="email" class="form-control">
+            <span class="error" *ngIf="getEmailControl.invalid && getEmailControl.touched">Email is Required Field*</span>
+            <span class="error" *ngIf="getEmailControl.dirty && getEmailControl.getError('forbiddenName') != null">Admin is already exist*</span>
+            <!-- <span class="error" *ngIf="getEmailControl.dirty && getEmailControl.getError('emailError') != null">Admin is already exist*</span> -->
+          </div>
+        </div>
+
+        <div class="form-group">
+          <h6>Genders</h6>
+          <div *ngFor="let gender of genders">
+            <label>
+              <input formControlName="gender" type="radio" name="gender" [value]="gender"> {{gender}}
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group mb-4">
+          <label for="password"><strong>Password</strong></label>
+          <input [type]="typeProp" name="password" id="password" class="show form-control" formControlName="password">
+          <i class="fas fa-eye" [ngClass]="{'fa-eye-slash' : typeProp === 'text'}" 
+          (click)="typeProp === 'password' ? typeProp = 'text' : typeProp = 'password' "></i>
+          <!-- <span class="error" *ngIf="getPassword.touched && getPassword.invalid">Password is required field</span> -->
+          <span class="error" *ngIf="getPassword.touched && fControls['password'].getError('required') != null">Password
+            is required field</span>
+          <span class="error" *ngIf="getPassword.touched && fControls['password'].getError('minlength') != null">Minimum
+            Length of password should be 8 Characters</span>
+        </div>
+
+        <div class="form-group mb-4">
+          <label for="confirmPass"><strong>Confirm Password</strong></label>
+          <input [type]="typeProp" name="confirmPass" id="confirmPass" class="show form-control"
+            formControlName="confirmPass">
+          <i class="fas fa-eye" [ngClass]="{'fa-eye-slash' : typeProp === 'text'}" 
+          (click)="typeProp === 'password' ? typeProp = 'text' : typeProp = 'password' "></i>
+          <span class="error"
+            *ngIf="fControls['confirmPass'].getError('required') != null && getConfirmPass.touched">Password is required
+            field</span>
+          <span class="error"
+            *ngIf="fControls['confirmPass'].getError('minlength') != null && getConfirmPass.touched">Minimum Length of
+            password should be 8 Characters</span>
+          <span class="error" *ngIf="(getPassword.value != getConfirmPass.value) && getConfirmPass.dirty">Password and
+            Confirm Password does not match</span>
+        </div>
+
+        <div class="mb-4" formArrayName="skills">
+          <h6>Skills Set</h6>
+          <div class="form-group" *ngFor="let skills of getSkillsArray.controls; let i = index">
+            <div class="row">
+              <div class="col-sm-10">
+                <input type="text" class="form-control" [formControlName]="i">
+              </div>
+              <div class="col-sm-2">
+                <button type="button" class="btn btn-danger" *ngIf="i > 0" (click)="onDeleteSkill(i)">
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-success" [disabled]="getSkillsArray.length == 5"
+            (click)="onAddSkill()">Add Skills</button>
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary"
+            [disabled]="signUpForm.invalid || (getPassword.value != getConfirmPass.value)">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

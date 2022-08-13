@@ -1,0 +1,31 @@
+
+
+.form-group{
+    position: relative;
+    .error{
+        position: absolute;
+        bottom: -25px;
+        color: orangered;
+    }
+}
+
+.show{
+    position: relative;
+}
+.fas{
+    position: absolute;
+    right: 10px;
+    top: 44px;
+    cursor: pointer;
+}
+
+input.ng-invalid.ng-touched{
+    box-shadow: 0 0 2px 2px orangered;
+}
+
+// .cross{
+//     font-size: 25px;
+//     color : red;
+//     text-shadow: 0 0 3px red;
+//     cursor: pointer;
+// }
